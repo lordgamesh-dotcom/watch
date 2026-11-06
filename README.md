@@ -1,0 +1,68 @@
+# Cyberpunk HUD for Galaxy Watch
+
+Resource-only Watch Face Format watch face for round displays, plus a small Android phone companion. The project is centered on the user-supplied Galaxy Watch 7 reference art and uses a 480 × 480 virtual canvas.
+
+## Assumptions and compatibility
+
+- WFF version 2 is selected because the requested Flavor presets require WFF 2. WFF 2 requires Wear OS 5 / API 34, so the watch face `minSdk` is 34; this supersedes the PDF's suggested `minSdk 33`, which is not compatible with its requested features.
+- Android Gradle Plugin 9.5.1 and Gradle 9.6.0 are used as the latest stable releases verified for this workspace on November 5, 2026. The watch-face module disables built-in Kotlin (`enableKotlin = false`) and contains no custom app code; its manifest declares `hasCode=false`.
+- The official WFF setup guide says watch-face bundles and app logic must be separate for store upload. The phone companion and face therefore have separate application IDs, both derived from `applicationIdBase` in `gradle.properties` (`com.example.cyberpunkface`).
+- Watch-face Play target API is 35, matching the Play requirement for Wear OS apps effective August 31, 2026; the phone companion targets API 36 under the regular Android app requirement. Compile SDK is 36.
+- Heart rate and steps are exposed as user-assignable complication slots. WFF 2 adds the heart-rate system source; `STEP_COUNT` is available as a system complication provider. Stress has no verified standard WFF source and is available only through the third slot. This project does not fabricate live readings.
+- The watch face declares no health runtime permissions. Heart rate and step access is delegated to the selected system complication providers, which handle their own permission and data flow. A Samsung Health stress provider must be installed and authorized separately.
+- The font files are Orbitron variable and Share Tech Mono, with their OFL license texts in `fonts/`; the WFF XML refers to those resources by family name.
+- WFF 2 supports `Outline` for regular `Text`, but its `TimeText` font definition does not accept that decoration. The AOD clock therefore uses thin, dim Orbitron text, as allowed by the prompt's fallback. Device-level AOD power and burn-in behavior remains to be measured.
+- WFF 2 limits each `ColorOption` to five colors. The six palettes use two linked configurations: `theme` carries roles 0–4 and `accent` carries roles 5–7. Flavor presets select the matching option in both configurations.
+- Layout choices and requested settings/flavors are declared. RINGS is the composed layout. BARS changes the progress indicators to segmented bars; MINIMAL hides the indicator tracks. Complication slots remain in the same three-column positions in each layout, rather than reflowing to a row. RANGED_VALUE slots drive ten-segment arcs or bars using the provider's value/min/max. The clock supports follow-device, forced 12/24-hour, leading-zero, optional seconds and glitch toggles. Battery bar segmentation is decorative rather than driven by the live percentage. These items need on-device review before store release.
+- The phone screen shows connection status through the Wearable NodeClient and gives the installation/customization and ADB instructions. The Play listing is not published, so a remote listing launcher is not shown.
+
+## Build
+
+Requires JDK 17 or newer and Android SDK platforms/build tools for API 35 and 36. In this workspace, JDK 21 and the Android SDK were available.
+
+```sh
+./gradlew :watchface:assembleDebug :phone:assembleDebug
+./gradlew :watchface:assembleRelease :phone:assembleRelease
+```
+
+The debug face APK is `watchface/build/outputs/apk/debug/watchface-debug.apk`. The release build is unsigned unless a signing configuration is supplied; never commit signing credentials. Rename both package IDs by changing `applicationIdBase` in `gradle.properties`.
+
+## Install on a watch
+
+```sh
+scripts/install.sh
+```
+
+For wireless ADB, enable Developer options and Wireless debugging on the watch, run `adb pair WATCH_IP:PAIR_PORT` with the pairing code shown by the watch, then `adb connect WATCH_IP:DEBUG_PORT`. Run the installer while connected and select Cyberpunk HUD from the watch face picker.
+
+## Preview and validation
+
+`scripts/render_preview.py` generates the 480 × 480 preview resource with Pillow. The supplied full-color image is retained as a separate visual reference in the phone resource tree.
+
+`scripts/validate-wff.sh` validates `watchface.xml` against the vendored official WFF 2 schema with an XSD 1.1 processor (`uv run --with xmlschema`). The schema uses repeated `xs:all` groups that the libxml2 schema processor used by xmllint does not accept. To run Google's memory-footprint evaluator, build its official tool from the `google/watchface` repository as described in that repository's `play-validations/README.md`, then set `WFF_MEMORY_EVALUATOR_JAR` to the built JAR and run the script after assembling the debug APK. The evaluator measures APK asset memory, not rendering correctness.
+
+## Validation status
+
+- `./gradlew :watchface:assembleDebug :phone:assembleDebug`: passed.
+- `./gradlew :watchface:assembleRelease :phone:assembleRelease`: passed; release APKs are not signed for publication.
+- `scripts/validate-wff.sh`: XSD validation passed with the vendored WFF 2 schema.
+- Google's memory-footprint evaluator: passed (0.08 MB active, 0.77 MB ambient; limits 100 MB / 10 MB).
+- The clock format, seconds, leading-zero and glitch branches plus RANGED_VALUE arcs/bars are structurally covered by the WFF XML; dynamic rendering still needs device verification.
+- `scripts/render_preview.py`: generated `watchface/src/main/res/drawable-nodpi/preview.png`.
+- Emulator/device checklist: no Wear OS AVD or connected watch was available. Validate round 480 and 432 profiles, pt-BR/en, 12/24-hour settings, every AOD style and theme/layout/boolean, empty complications, and circular-edge clipping.
+
+## Unverified assumptions and known limitations
+
+- Samsung's One UI Watch behavior for providers that expose stress data depends on the installed health provider and must be tested on a Galaxy Watch.
+- A provider may return a RANGED_VALUE or SHORT_TEXT payload that differs in formatting; the face uses the slot's supplied value/text and shows `--` for an empty stress slot.
+- WFF 2 permits text outlines for ordinary `Text`; its `TimeText` font definition does not accept that decoration. AOD is thin dim Orbitron text instead.
+- The supplied reference graphics show the target composition; the generated preview is representative and is not a screenshot from Wear OS.
+- No Play listing exists. Companion-app cross-device launch to a Play listing should be wired after publication and a listing ID is available.
+
+## Publishing checklist
+
+1. Run WFF XSD and memory-footprint validation with clean results.
+2. Test on Wear OS 5+ round emulator and the Galaxy Watch 7 44 mm, including AOD burn-in and battery use.
+3. Add signed release configuration outside version control and generate separate app bundles for watch face and companion app.
+4. Create store listing assets, privacy disclosures, accessibility review, and test track release.
+5. Recheck current Play policy, target API requirement, and Samsung Health complication-provider availability before publishing.

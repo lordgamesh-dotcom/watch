@@ -49,7 +49,7 @@ For wireless ADB, enable Developer options and Wireless debugging on the watch, 
 - Google's memory-footprint evaluator: passed (0.08 MB active, 0.77 MB ambient; limits 100 MB / 10 MB).
 - The clock format, seconds, leading-zero and glitch branches plus RANGED_VALUE arcs/bars are structurally covered by the WFF XML; dynamic rendering still needs device verification.
 - `scripts/render_preview.py`: generated `watchface/src/main/res/drawable-nodpi/preview.png`.
-- Emulator/device checklist: no Wear OS AVD or connected watch was available. Validate round 480 and 432 profiles, pt-BR/en, 12/24-hour settings, every AOD style and theme/layout/boolean, empty complications, and circular-edge clipping.
+- Physical device: installed and activated successfully on a Samsung Galaxy Watch 7 (SM-L315F, API 36, 480 × 480). The active screen rendered the clock, battery, date, heart-rate and steps complications, an empty stress slot, circular-edge composition, and pt-BR labels. No Wear OS AVD was available. Validate the 432 profile, en locale, forced 12/24-hour settings, every theme/layout/boolean, and AOD after unlocking the device; the lock-pattern overlay prevented a clean AOD capture during this run.
 
 ## Unverified assumptions and known limitations
 

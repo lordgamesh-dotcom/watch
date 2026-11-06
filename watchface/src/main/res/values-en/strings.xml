@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Cyberpunk HUD</string>
+    <string name="theme_label">Theme</string>
+    <string name="theme_neon">Neon Cyber</string><string name="theme_red">Red Fury</string><string name="theme_toxic">Toxic Green</string><string name="theme_synth">Synthwave</string><string name="theme_ice">Ice</string><string name="theme_gold">Gold</string>
+    <string name="layout_label">Layout</string><string name="layout_rings">Rings</string><string name="layout_bars">Bars</string><string name="layout_minimal">Minimal</string>
+    <string name="aod_label">Always-on display</string><string name="aod_time">Time only</string><string name="aod_date">Time and date</string><string name="aod_battery">Time and battery</string>
+    <string name="hour_label">Hour format</string><string name="hour_device">Follow device</string><string name="hour_24">24-hour</string><string name="hour_12">12-hour</string>
+    <string name="toggle_glitch">Chromatic glitch</string><string name="toggle_ticks">Tick ring</string><string name="toggle_date">Show date</string><string name="toggle_zero">Leading zero</string><string name="toggle_scanlines">Scanlines</string><string name="toggle_seconds">Show seconds</string>
+    <string name="flavor_fury">Fury</string><string name="flavor_stealth">Stealth</string><string name="flavor_alert">Red Alert</string>
+    <string name="comp_hr">Heart rate</string><string name="comp_steps">Steps</string><string name="comp_stress">Stress</string>
+</resources>

@@ -1,0 +1,6 @@
+<WatchFaceInfo>
+    <Preview value="@drawable/preview" />
+    <Category value="CATEGORY_EMPTY" />
+    <Editable value="true" />
+    <FlavorsSupported value="true" />
+</WatchFaceInfo>

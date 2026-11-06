@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Cyberpunk HUD</string>
+    <string name="title">Cyberpunk HUD</string>
+    <string name="connection">Conexão com o relógio</string>
+    <string name="instructions">Como instalar</string>
+    <string name="checking">Verificando dispositivos conectados…</string>
+    <string name="disconnected">Nenhum relógio conectado</string>
+    <string name="connected">Relógio conectado</string>
+    <string name="connection_error">Não foi possível consultar o relógio</string>
+    <string name="steps">No relógio, pressione e segure o mostrador atual, deslize até Adicionar mostrador e escolha Cyberpunk HUD. Para personalizar, mantenha o mostrador pressionado e toque em Personalizar. Escolha tema, layout, AOD e provedores de complicações.</string>
+    <string name="adb_steps">Instalação ADB: ative Opções do desenvolvedor e Depuração sem fio no relógio. Faça o pareamento com adb pair IP_DO_RELOGIO:PORTA_DE_PAREAMENTO, conecte com adb connect IP_DO_RELOGIO:PORTA_DE_DEPURACAO e instale com adb install -r watchface-debug.apk.</string>
+    <string name="privacy">Privacidade: este app não coleta dados, não exibe anúncios e não faz chamadas de rede.</string>
+    <string name="preview_description">Prévia do mostrador Cyberpunk HUD</string>
+</resources>

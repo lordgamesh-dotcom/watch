@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Cyberpunk HUD</string>
+    <string name="title">Cyberpunk HUD</string>
+    <string name="connection">Watch connection</string>
+    <string name="instructions">How to install</string>
+    <string name="checking">Checking connected devices…</string>
+    <string name="disconnected">No watch connected</string>
+    <string name="connected">Watch connected</string>
+    <string name="connection_error">Could not check the watch</string>
+    <string name="steps">On the watch, press and hold the current face, swipe to Add watch face, and choose Cyberpunk HUD. To customize, press and hold the face and tap Customize. Choose a theme, layout, AOD style, and complication providers.</string>
+    <string name="adb_steps">ADB install: enable Developer options and Wireless debugging on the watch. Pair with adb pair WATCH_IP:PAIRING_PORT, connect with adb connect WATCH_IP:DEBUG_PORT, then run adb install -r watchface-debug.apk.</string>
+    <string name="privacy">Privacy: this app collects no data, shows no ads, and makes no network calls.</string>
+    <string name="preview_description">Cyberpunk HUD watch face preview</string>
+</resources>

@@ -2,7 +2,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 XSD="$ROOT/tools/wff-schema/watchface.xsd"
-MODULES=(watchface retrowave)
+MODULES=(watchface retrowave wasteland)
 if command -v uv >/dev/null 2>&1; then
   for module in "${MODULES[@]}"; do
     XML="$ROOT/$module/src/main/res/raw/watchface.xml"

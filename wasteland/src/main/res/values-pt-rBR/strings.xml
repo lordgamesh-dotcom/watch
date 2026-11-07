@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Wasteland Terminal</string>
+    <string name="palette_label">Fósforo</string>
+    <string name="palette_green">Verde</string>
+    <string name="palette_amber">Âmbar</string>
+    <string name="palette_ice">Gelo</string>
+    <string name="comp_hr">Frequência cardíaca</string>
+    <string name="comp_steps">Passos</string>
+</resources>

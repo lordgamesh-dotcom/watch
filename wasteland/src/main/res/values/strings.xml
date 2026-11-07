@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Wasteland Terminal</string>
+    <string name="palette_label">Phosphor</string>
+    <string name="palette_green">Green</string>
+    <string name="palette_amber">Amber</string>
+    <string name="palette_ice">Ice</string>
+    <string name="comp_hr">Heart rate</string>
+    <string name="comp_steps">Steps</string>
+</resources>

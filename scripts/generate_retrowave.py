@@ -314,6 +314,8 @@ def panels(p):
 
 
 UNREAD = "[UNREAD_NOTIFICATION_COUNT] > 0"
+NEON_HALO = [([(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)], 110),
+             ([(2, 0), (-2, 0), (0, 2), (0, -2), (2, 2), (2, -2), (-2, 2), (-2, -2)], 50)]
 
 
 def unread_condition(*children):
@@ -372,8 +374,15 @@ def aod(p):
     # Galaxy Watch AOD offload only rendered plain PartText in testing; Monoton is a line font,
     # so a plain copy already reads as an outlined neon clock.
     # The unread line is plain text too, shown only when there is something unread.
-    unread = unread_condition(text(90, 300, 300, 30, [template("[ %02d MSG ]", "[UNREAD_NOTIFICATION_COUNT]")],
-                                   "audiowide", 20, p["pink"]))
+    # Static neon glow: offset copies at low alpha form a halo, a light core sits on top.
+    def msg(dx, dy, color, alpha=None):
+        t = text(90 + dx, 300 + dy, 300, 30, [template("[ %02d MSG ]", "[UNREAD_NOTIFICATION_COUNT]")],
+                 "audiowide", 20, color)
+        if alpha is not None:
+            t.set("alpha", str(alpha))
+        return t
+    halo = [msg(dx, dy, p["pink"], a) for offs, a in NEON_HALO for dx, dy in offs]
+    unread = unread_condition(*halo, msg(0, 0, "#FFE6F5"))
     return group(f"aod_{p['id']}",
                  text(10, 186, 460, 108, [template("%02d:%02d", HOUR, "[MINUTE]")], "monoton", 88, p["glow"]),
                  unread, alpha=0)

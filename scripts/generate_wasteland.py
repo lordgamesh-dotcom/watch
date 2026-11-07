@@ -136,6 +136,8 @@ def panels(p):
 
 
 UNREAD = "[UNREAD_NOTIFICATION_COUNT] &gt; 0"
+NEON_HALO = [([(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)], 110),
+             ([(2, 0), (-2, 0), (0, 2), (0, -2), (2, 2), (2, -2), (-2, 2), (-2, -2)], 50)]
 
 
 def blink(low_alpha=0.25):
@@ -267,8 +269,11 @@ def steps_slot():
 def aod(p):
     # Galaxy Watch AOD offload rendered only plain PartText in testing.
     box = (TIME_X - 4, 172, 5 * CHAR * TIME_SIZE + 20, 136)
-    unread = condition(("unread", UNREAD, [text(90, 306, 300, 30, [template("> %02d MSG", "[UNREAD_NOTIFICATION_COUNT]")],
-                                                  FONT, 26, p["main"])]))
+    def msg(dx, dy, color, alpha=None):
+        return text(90 + dx, 306 + dy, 300, 30, [template("> %02d MSG", "[UNREAD_NOTIFICATION_COUNT]")],
+                    FONT, 26, color, alpha=alpha)
+    halo = [msg(dx, dy, p["main"], a) for offs, a in NEON_HALO for dx, dy in offs]
+    unread = condition(("unread", UNREAD, [*halo, msg(0, 0, p["bright"])]))
     return group(f"aod_{p['id']}",
                  text(*box, [template("%02d:%02d", HOUR, "[MINUTE]")], FONT, TIME_SIZE, p["dim"], align="START"),
                  unread, alpha=0)

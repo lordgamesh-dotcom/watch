@@ -423,13 +423,18 @@ for p in aod.iter("PartText"):
     if v is not None:
         p.remove(v)
         p.attrib.pop("alpha", None)
-# Unread notification line under the AOD content (plain text, which the offload renders).
+# Unread notification line under the AOD content (plain text, which the offload renders),
+# with a static neon glow built from offset copies.
+NEON_HALO = [([(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)], 110),
+             ([(2, 0), (-2, 0), (0, 2), (0, -2), (2, 2), (2, -2), (-2, 2), (-2, -2)], 50)]
 for opt in aod.findall("ListOption"):
     grp = opt.find("Group")
     y = 300 if opt.get("id") == "0" else 312
-    grp.append(condition(("unread", "[UNREAD_NOTIFICATION_COUNT] &gt; 0",
-                          [text(120, y, 240, 28, [template("[ %02d MSG ]", "[UNREAD_NOTIFICATION_COUNT]")],
-                                size=19, color=ALERT)])))
+    def msg(dx, dy, color, alpha=None):
+        return text(120 + dx, y + dy, 240, 28, [template("[ %02d MSG ]", "[UNREAD_NOTIFICATION_COUNT]")],
+                    size=19, color=color, weight="BOLD", alpha=alpha)
+    halo = [msg(dx, dy, ALERT, a) for offs, a in NEON_HALO for dx, dy in offs]
+    grp.append(condition(("unread", "[UNREAD_NOTIFICATION_COUNT] &gt; 0", [*halo, msg(0, 0, "#FFE8E8")])))
 
 out = ET.tostring(root, encoding="unicode")
 # ElementTree escapes &, <, > in text; the helpers above wrote them pre-escaped for readability.

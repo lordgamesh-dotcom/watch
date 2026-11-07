@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Retrowave</string>
     <string name="palette_label">Paleta</string>
-    <string name="palette_sunset">Pôr do sol</string>
-    <string name="palette_miami">Miami</string>
-    <string name="palette_outrun">Outrun</string>
     <string name="comp_hr">Frequência cardíaca</string>
     <string name="comp_steps">Passos</string>
+    <string name="palette_island">Ilha Neon</string>
+    <string name="palette_vice">Vice City</string>
+    <string name="palette_vapor">Vaporwave</string>
 </resources>

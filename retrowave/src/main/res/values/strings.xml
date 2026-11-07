@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Retrowave</string>
+    <string name="palette_label">Palette</string>
+    <string name="palette_sunset">Sunset</string>
+    <string name="palette_miami">Miami</string>
+    <string name="palette_outrun">Outrun</string>
+    <string name="comp_hr">Heart rate</string>
+    <string name="comp_steps">Steps</string>
+</resources>

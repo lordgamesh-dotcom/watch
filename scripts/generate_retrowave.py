@@ -17,7 +17,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 OUT = Path(__file__).resolve().parent.parent / "retrowave/src/main/res/raw/watchface.xml"
-H = 300        # horizon
+H = 312        # horizon
 SUN_R = 118
 SUN_TOP = H - SUN_R
 
@@ -186,8 +186,8 @@ def triangle_lines(pts, colors, t):
 
 
 def triangles(p):
-    big = [(118, 184), (362, 184), (240, H - 2)]
-    small = [(240, 204), (290, H - 6), (190, H - 6)]
+    big = [(118, H - 116), (362, H - 116), (240, H - 2)]
+    small = [(240, H - 96), (290, H - 6), (190, H - 6)]
     big_cols = [p["tri_top"], p["tri_leg"], p["tri_leg"]]
     small_cols = [p["tri_small"]] * 3
     glow = draw(*triangle_lines(big, big_cols, 10), *triangle_lines(small, small_cols, 9), alpha=55)
@@ -245,8 +245,8 @@ def water(p):
     sea = draw(rect(0, H, 480, 480 - H, fill(p["water"][0], vgrad(H, 480, p["water"], [0, 1]))))
     horizon = draw(line(0, H, 480, H, p["pink"], 1.5), alpha=140)
     # Mirror of the big triangle's legs.
-    mirror = draw(line(240, H + 2, 118, 2 * H - 184, p["tri_leg"], 2),
-                  line(240, H + 2, 362, 2 * H - 184, p["tri_leg"], 2), alpha=45)
+    mirror = draw(line(240, H + 2, 118, H + 116, p["tri_leg"], 2),
+                  line(240, H + 2, 362, H + 116, p["tri_leg"], 2), alpha=45)
     # Sun reflection: stripes mirrored under the horizon, each one widening and narrowing
     # out of phase with its neighbours so the water appears to shimmer.
     bars = []
@@ -265,7 +265,7 @@ def water(p):
     rnd = random.Random(5)
     ripples = []
     for _ in range(26):
-        y = rnd.randint(H + 6, 330)
+        y = rnd.randint(H + 5, H + 24)
         x = rnd.randint(60, 420)
         ln = rnd.randint(8, 26)
         ripples.append(line(x, y, x + ln, y, rnd.choice([p["pink"], p["cyan"], p["tri_top"]]), 1))
@@ -285,11 +285,11 @@ def seconds_rim(p):
 
 
 def clock_texts(p):
-    date = text(60, 44, 360, 28, [E("Upper", None, template(
+    date = text(40, 40, 400, 32, [E("Upper", None, template(
         "%s   %02d   %s", 'subText(icuText("EEE"), 0, 3)', "[DAY]", 'subText(icuText("MMM"), 0, 3)'))],
-        "audiowide", 18, p["date"], glow=(p["date"], 6))
-    time = text(10, 72, 460, 104, [template("%02d:%02d", HOUR, "[MINUTE]")],
-                "monoton", 84, p["time"], glow=(p["glow"], 12))
+        "audiowide", 21, p["date"], glow=(p["date"], 6))
+    time = text(0, 72, 480, 118, [template("%02d:%02d", HOUR, "[MINUTE]")],
+                "monoton", 96, p["time"], glow=(p["glow"], 12))
     return [date, time]
 
 

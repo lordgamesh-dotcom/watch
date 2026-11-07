@@ -313,9 +313,33 @@ def panels(p):
     return [draw(*glows, alpha=60), draw(*shapes), battery, *labels]
 
 
+UNREAD = "[UNREAD_NOTIFICATION_COUNT] > 0"
+
+
+def unread_condition(*children):
+    return E("Condition", None, E("Expressions", None, E("Expression", dict(name="unread"), text=UNREAD)),
+             E("Compare", dict(expression="unread"), *children))
+
+
+def unread_pill(p):
+    """Neon sign on the water with an envelope and the unread notification count."""
+    x, y, w, h = 194, H + 3, 92, 22
+    box = dict(x=x, y=y, width=w, height=h, cornerRadiusX=11, cornerRadiusY=11)
+    ex, ey = x + 14, y + 6  # envelope
+    envelope = [E("Rectangle", dict(x=ex, y=ey, width=18, height=11), stroke(p["pink"], 1.5)),
+                line(ex, ey, ex + 9, ey + 6, p["pink"], 1.5), line(ex + 18, ey, ex + 9, ey + 6, p["pink"], 1.5)]
+    blink = animate("alpha", "[SECOND] % 2 == 0 ? 255 : 110", duration=0.3)
+    sign = group("unread_sign", blink,
+                 draw(E("RoundRectangle", box, stroke(p["pink"], 6)), alpha=70),
+                 draw(E("RoundRectangle", box, fill("#E6050210"), stroke(p["pink"], 1.5)), *envelope),
+                 text(x + 36, y, w - 42, h, [template("%02d", "[UNREAD_NOTIFICATION_COUNT]")],
+                      "audiowide", 16, "#FFFFFF", glow=(p["pink"], 6)))
+    return unread_condition(sign)
+
+
 def palette_scene(p):
     return group(f"scene_{p['id']}", sky(p), *stars(), *sun(p), triangles(p), *island(p), *water(p),
-                 *seconds_rim(p), *clock_texts(p), *panels(p))
+                 *seconds_rim(p), *clock_texts(p), *panels(p), unread_pill(p))
 
 
 # ------------------------------------------------------------------ complications, AOD, root
@@ -347,9 +371,12 @@ def complication_slot(slot_id, cx, name, primary, system, types, glow):
 def aod(p):
     # Galaxy Watch AOD offload only rendered plain PartText in testing; Monoton is a line font,
     # so a plain copy already reads as an outlined neon clock.
+    # The unread line is plain text too, shown only when there is something unread.
+    unread = unread_condition(text(90, 300, 300, 30, [template("[ %02d MSG ]", "[UNREAD_NOTIFICATION_COUNT]")],
+                                   "audiowide", 20, p["pink"]))
     return group(f"aod_{p['id']}",
                  text(10, 186, 460, 108, [template("%02d:%02d", HOUR, "[MINUTE]")], "monoton", 88, p["glow"]),
-                 alpha=0)
+                 unread, alpha=0)
 
 
 def build():

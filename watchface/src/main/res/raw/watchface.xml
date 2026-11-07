@@ -11,7 +11,7 @@
       <ColorOption id="4" displayName="theme_ice" colors="#8FD8FF #FFFFFF #FF6B7A #BFE9FF #8FD8FF" />
       <ColorOption id="5" displayName="theme_gold" colors="#FFC83D #FFF3C4 #FF2D4A #FFC83D #FFC83D" />
     </ColorConfiguration>
-    <ColorConfiguration id="accent" defaultValue="0" displayName="theme_label" screenReaderText="theme_label">
+    <ColorConfiguration id="accent" defaultValue="0" displayName="accent_label" screenReaderText="accent_label">
       <ColorOption id="0" displayName="theme_neon" colors="#FF8A1F #F5EB0A #8FA3AB" />
       <ColorOption id="1" displayName="theme_red" colors="#FF8A1F #FF2D4A #C4A9AE" />
       <ColorOption id="2" displayName="theme_toxic" colors="#FF8A1F #E8FF3A #8FB3A0" />

@@ -267,6 +267,12 @@ if DEBUG:
 for el in icons + labels + [rest]:
     face.append(el)
 
+# ---------------------------------------------------------------- second colour setting gets its own name
+for c in root.iter("ColorConfiguration"):
+    if c.get("id") == "accent":
+        c.set("displayName", "accent_label")
+        c.set("screenReaderText", "accent_label")
+
 # ---------------------------------------------------------------- scanlines on by default
 for b in root.iter("BooleanConfiguration"):
     if b.get("id") == "scanlines" and b.get("defaultValue"):

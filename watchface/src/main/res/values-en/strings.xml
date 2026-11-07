@@ -8,4 +8,5 @@
     <string name="toggle_glitch">Chromatic glitch</string><string name="toggle_ticks">Tick ring</string><string name="toggle_date">Show date</string><string name="toggle_zero">Leading zero</string><string name="toggle_scanlines">Scanlines</string><string name="toggle_seconds">Show seconds</string>
     <string name="flavor_fury">Fury</string><string name="flavor_stealth">Stealth</string><string name="flavor_alert">Red Alert</string>
     <string name="comp_hr">Heart rate</string><string name="comp_steps">Steps</string><string name="comp_stress">Stress</string>
+    <string name="accent_label">Details</string>
 </resources>

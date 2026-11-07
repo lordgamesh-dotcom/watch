@@ -9,7 +9,7 @@ Run from the repository root; the generated XML is committed.
 """
 from pathlib import Path
 
-from wfflib import (E, HOUR, SHEALTH, animate, arc, condition, draw, fill, group, lang, line, num,
+from wfflib import (E, HOUR, PT, SHEALTH, animate, arc, condition, draw, fill, group, lang, line, num,
                     rect, stroke, template, text, text_number, write)
 
 OUT = Path(__file__).resolve().parent.parent / "wasteland/src/main/res/raw/watchface.xml"
@@ -107,6 +107,7 @@ def panels(p):
     out = [draw(*bracket_frame(*LEFT, p["main"]), *bracket_frame(*RIGHT, p["main"]), alpha=200)]
     out += tag(LEFT[0] + 6, LEFT[1] + 6, ("PULSO", "PULSE"), p)
     out += tag(RIGHT[0] + 6, RIGHT[1] + 6, ("STATUS", "STATUS"), p)
+    out.append(messages_badge(p))
 
     # Pulse gauge scale (40-200 bpm across -75..75 degrees).
     import math
@@ -134,6 +135,23 @@ def panels(p):
     return out
 
 
+UNREAD = "[UNREAD_NOTIFICATION_COUNT] &gt; 0"
+
+
+def blink(low_alpha=0.25):
+    low = round(255 * low_alpha)
+    return animate("alpha", f"[SECOND] % 2 == 0 ? 255 : {low}", duration=0.15, interpolation="LINEAR")
+
+
+def messages_badge(p):
+    """Unread notification counter in the status panel header; blinks while there is unread mail."""
+    box = (RIGHT[0] + RIGHT[2] - 92, RIGHT[1] + 4, 84, 22)
+    live = text(*box, [template("MSG %02d", "[UNREAD_NOTIFICATION_COUNT]")], FONT, 22, p["bright"],
+                align="END", glow=(p["main"], 6), transforms=[blink()])
+    idle = text(*box, "MSG --", FONT, 22, p["dim"], align="END")
+    return condition(("unread", UNREAD, [live]), default=[idle])
+
+
 def power_bar(p):
     out = [text(66, 356, 50, 22, "PWR", FONT, 20, p["dim"], align="START"),
            draw(line(104, 358, 104, 376, p["main"], 2), line(104, 358, 109, 358, p["main"], 2),
@@ -142,7 +160,13 @@ def power_bar(p):
     for k in range(20):
         lit = E("Transform", dict(target="alpha", value=f"[BATTERY_PERCENT] &gt;= {5 * (k + 1)} ? 255 : 45"))
         out.append(draw(rect(110 + k * 13, 361, 10, 13, fill(p["main"])), transforms=[lit]))
-    out.append(text(40, 386, 400, 24, lang("> SISTEMA OPERACIONAL", "> SYSTEM ONLINE"), FONT, 20, p["dim"]))
+    out.append(condition(
+        ("has_unread", UNREAD, [text(40, 386, 400, 24, [template(
+            "> %d %s", "[UNREAD_NOTIFICATION_COUNT]",
+            f'[UNREAD_NOTIFICATION_COUNT] == 1 ? ({PT} ? "MENSAGEM NOVA" : "NEW MESSAGE") : '
+            f'({PT} ? "MENSAGENS NOVAS" : "NEW MESSAGES")')],
+            FONT, 20, p["bright"], glow=(p["main"], 5), transforms=[blink(0.5)])]),
+        default=[text(40, 386, 400, 24, lang("> SISTEMA OPERACIONAL", "> SYSTEM ONLINE"), FONT, 20, p["dim"])]))
     return out
 
 

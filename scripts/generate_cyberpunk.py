@@ -423,6 +423,13 @@ for p in aod.iter("PartText"):
     if v is not None:
         p.remove(v)
         p.attrib.pop("alpha", None)
+# Unread notification line under the AOD content (plain text, which the offload renders).
+for opt in aod.findall("ListOption"):
+    grp = opt.find("Group")
+    y = 300 if opt.get("id") == "0" else 312
+    grp.append(condition(("unread", "[UNREAD_NOTIFICATION_COUNT] &gt; 0",
+                          [text(120, y, 240, 28, [template("[ %02d MSG ]", "[UNREAD_NOTIFICATION_COUNT]")],
+                                size=19, color=ALERT)])))
 
 out = ET.tostring(root, encoding="unicode")
 # ElementTree escapes &, <, > in text; the helpers above wrote them pre-escaped for readability.

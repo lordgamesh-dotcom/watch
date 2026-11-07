@@ -267,9 +267,11 @@ def steps_slot():
 def aod(p):
     # Galaxy Watch AOD offload rendered only plain PartText in testing.
     box = (TIME_X - 4, 172, 5 * CHAR * TIME_SIZE + 20, 136)
+    unread = condition(("unread", UNREAD, [text(90, 306, 300, 30, [template("> %02d MSG", "[UNREAD_NOTIFICATION_COUNT]")],
+                                                  FONT, 26, p["main"])]))
     return group(f"aod_{p['id']}",
                  text(*box, [template("%02d:%02d", HOUR, "[MINUTE]")], FONT, TIME_SIZE, p["dim"], align="START"),
-                 alpha=0)
+                 unread, alpha=0)
 
 
 def build():
